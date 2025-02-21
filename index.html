@@ -160,9 +160,32 @@
     </div>
 
     <script>
+        const sidebar = document.getElementById("sidebar");
+        const sidebarTrigger = document.getElementById("sidebar-trigger");
+        let isHovering = false;
+
+        function toggleSidebar(open) {
+            if (open) {
+                sidebar.classList.add("expanded");
+            } else {
+                sidebar.classList.remove("expanded");
+            }
+        }
+
+        sidebarTrigger.addEventListener("mouseenter", () => {
+            isHovering = true;
+            toggleSidebar(true);
+        });
+
+        sidebar.addEventListener("mouseleave", () => {
+            isHovering = false;
+            setTimeout(() => {
+                if (!isHovering) toggleSidebar(false);
+            }, 300);
+        });
+
         function changePage(page, push = true) {
             const content = document.getElementById('content');
-
             content.style.opacity = 0;
 
             setTimeout(() => {
@@ -175,7 +198,7 @@
                 };
 
                 let pageContent = {
-                    'home': '<h1>Home</h1><p>Welcome to PickleHub!</p><h1>uhh idk</h1>',
+                    'home': '<h1>Home</h1><p>Welcome to PickleHub!</p>',
                     'games': '<h1>Games</h1><p>Here are some fun games to play!</p><img src="https://via.placeholder.com/250" alt="Games Image">',
                     'search': '<h1>Search</h1><p>Search for your favorite content.</p><img src="https://via.placeholder.com/250" alt="Search Image">',
                     'ai': '<h1>AI</h1><p>Explore AI-powered features!</p><img src="https://cdn-icons-png.flaticon.com/512/826/826118.png" alt="AI Image">',
