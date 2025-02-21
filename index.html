@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PickleHub</title>
-      <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/605/605132.png">
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/605/605132.png">
     <style>
         * {
             margin: 0;
@@ -160,42 +160,7 @@
     </div>
 
     <script>
-        const sidebar = document.getElementById("sidebar");
-        const sidebarTrigger = document.getElementById("sidebar-trigger");
-        let isHovering = false;
-
-        function toggleSidebar(open) {
-            if (open) {
-                sidebar.classList.add("expanded");
-            } else {
-                sidebar.classList.remove("expanded");
-            }
-        }
-
-        function autoCloseSidebar() {
-            setTimeout(() => {
-                sidebar.classList.remove("expanded");
-            }, 1000);
-        }
-
-        sidebarTrigger.addEventListener("mouseenter", () => {
-            isHovering = true;
-            toggleSidebar(true);
-        });
-
-        sidebar.addEventListener("mouseleave", () => {
-            isHovering = false;
-            setTimeout(() => {
-                if (!isHovering) toggleSidebar(false);
-            }, 300);
-        });
-
-        window.onload = function () {
-            toggleSidebar(true);
-            setTimeout(() => toggleSidebar(false), 1000);
-        };
-
-        function changePage(page) {
+        function changePage(page, push = true) {
             const content = document.getElementById('content');
 
             content.style.opacity = 0;
@@ -219,9 +184,25 @@
 
                 document.title = pageTitles[page] || 'PickleHub | 404';
                 content.innerHTML = pageContent[page] || '<h1>404</h1><p>Page not found</p>';
+
+                if (push) {
+                    history.pushState({ page }, pageTitles[page], `/${page}`);
+                }
+
                 content.style.opacity = 1;
             }, 300);
         }
+
+        window.onpopstate = function (event) {
+            if (event.state && event.state.page) {
+                changePage(event.state.page, false);
+            }
+        };
+
+        window.onload = function () {
+            let path = window.location.pathname.replace('/', '') || 'home';
+            changePage(path, false);
+        };
     </script>
 
 </body>
