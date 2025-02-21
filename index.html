@@ -19,21 +19,48 @@
         }
 
         .sidebar {
-            width: 80px;
+            width: 60px;
             background: #f8f8f8;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px 0;
+            padding: 15px 0;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            left: -55px;
+            top: 0;
+            bottom: 0;
+            transition: left 0.4s ease-in-out;
+            z-index: 1000;
+            border-right: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar.expanded {
+            left: 0;
+        }
+
+        .sidebar-trigger {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+            z-index: 999;
+        }
+
+        .sidebar-trigger:hover {
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .logo {
-            width: 50px;
-            height: 50px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .logo img {
@@ -42,16 +69,17 @@
         }
 
         .nav-item {
-            width: 60px;
-            height: 60px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 5px 0;
-            border-radius: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s;
-            border: 1px solid #808080; 
+            border: 1px solid #aaa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .nav-item:hover {
@@ -59,52 +87,141 @@
         }
 
         .nav-item img {
-            max-width: 100%;  
-            max-height: 100%;
+            width: 75%;
+            height: 75%;
+        }
+
+        .settings-button {
+            position: absolute;
+            bottom: 20px;
+            width: 35px;
+            height: 35px;
+            background: black;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-button img {
+            width: 60%;
+            height: 60%;
+            filter: invert(1);
         }
 
         .content {
             flex: 1;
             padding: 20px;
+            transition: opacity 0.3s ease-in-out;
+            text-align: center;
+            margin-left: 5px;
         }
 
-        .footer {
-            margin-top: auto;
-            width: 50px;
-            height: 50px;
-            background: #333;
-            border-radius: 50%;
-            cursor: pointer;
+        .content img {
+            max-width: 250px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="logo">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2GHzfJI6fQtEJZvd_wXT7Ig_CHzr8w5Suw&s" alt="Logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/605/605132.png" alt="Logo">
         </div>
-        <div class="nav-item">
-            <img src="https://icons8.com/icon/1iF9PyJ2Thzo/home" alt="Home">
+        <div class="nav-item" onclick="changePage('home')">
+            <img src="https://img.icons8.com/?size=100&id=1iF9PyJ2Thzo&format=png&color=000000" alt="Home">
         </div>
-        <div class="nav-item">
-            <img src="https://cdn-icons-png.flaticon.com/512/13/13973.png" alt="Docs">
+        <div class="nav-item" onclick="changePage('games')">
+            <img src="https://cdn-icons-png.flaticon.com/512/13/13973.png" alt="Games">
         </div>
-        <div class="nav-item">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2GHzfJI6fQtEJZvd_wXT7Ig_CHzr8w5Suw&s" alt="Search">
+        <div class="nav-item" onclick="changePage('search')">
+            <img src="https://www.freeiconspng.com/thumbs/search-icon-png/search-icon-png-5.png" alt="Search">
         </div>
-        <div class="nav-item">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2GHzfJI6fQtEJZvd_wXT7Ig_CHzr8w5Suw&s" alt="AI">
+        <div class="nav-item" onclick="changePage('ai')">
+            <img src="https://www.svgrepo.com/show/486520/ai.svg" alt="AI">
         </div>
-        <div class="nav-item">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh2GHzfJI6fQtEJZvd_wXT7Ig_CHzr8w5Suw&s" alt="Settings">
+
+        <div class="settings-button" onclick="changePage('settings')">
+            <img src="https://cdn-icons-png.flaticon.com/512/2099/2099058.png" alt="Settings">
         </div>
-        <div class="footer"></div>
     </div>
 
-    <div class="content">
-        <h1>Home</h1>
+    <div class="sidebar-trigger" id="sidebar-trigger"></div>
+
+    <div class="content" id="content">
+        <h1>I love PickleHub 🥒</h1>
+        <p>Press the home icon dumbo</p>
+        <img src="https://via.placeholder.com/300" alt="Example Image">
     </div>
+
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const sidebarTrigger = document.getElementById("sidebar-trigger");
+        let isHovering = false;
+
+        function toggleSidebar(open) {
+            if (open) {
+                sidebar.classList.add("expanded");
+            } else {
+                sidebar.classList.remove("expanded");
+            }
+        }
+
+        function autoCloseSidebar() {
+            setTimeout(() => {
+                sidebar.classList.remove("expanded");
+            }, 1000);
+        }
+
+        sidebarTrigger.addEventListener("mouseenter", () => {
+            isHovering = true;
+            toggleSidebar(true);
+        });
+
+        sidebar.addEventListener("mouseleave", () => {
+            isHovering = false;
+            setTimeout(() => {
+                if (!isHovering) toggleSidebar(false);
+            }, 300);
+        });
+
+        window.onload = function () {
+            toggleSidebar(true);
+            setTimeout(() => toggleSidebar(false), 1000);
+        };
+
+        function changePage(page) {
+            const content = document.getElementById('content');
+
+            content.style.opacity = 0;
+
+            setTimeout(() => {
+                let pageTitles = {
+                    'home': 'PickleHub | Home',
+                    'games': 'PickleHub | Games',
+                    'search': 'PickleHub | Search',
+                    'ai': 'PickleHub | AI',
+                    'settings': 'PickleHub | Settings'
+                };
+
+                let pageContent = {
+                    'home': '<h1>Home</h1><p>Welcome to PickleHub!</p><h1>uhh idk</h1>',
+                    'games': '<h1>Games</h1><p>Here are some fun games to play!</p><img src="https://via.placeholder.com/250" alt="Games Image">',
+                    'search': '<h1>Search</h1><p>Search for your favorite content.</p><img src="https://via.placeholder.com/250" alt="Search Image">',
+                    'ai': '<h1>AI</h1><p>Explore AI-powered features!</p><img src="https://cdn-icons-png.flaticon.com/512/826/826118.png" alt="AI Image">',
+                    'settings': '<h1>Settings</h1><p>Customize your experience.</p><img src="https://via.placeholder.com/250" alt="Settings Image">'
+                };
+
+                document.title = pageTitles[page] || 'PickleHub | 404';
+                content.innerHTML = pageContent[page] || '<h1>404</h1><p>Page not found</p>';
+                content.style.opacity = 1;
+            }, 300);
+        }
+    </script>
 
 </body>
 </html>
