@@ -223,9 +223,12 @@
         };
 
         window.onload = function () {
-            let path = window.location.pathname.replace('/PickleHub/');
-            changePage(path, false);
-        };
+    let path = window.location.pathname.replace('/', '') || ''; 
+    if (path && pageTitles[path]) {
+        changePage(path, false);
+    }
+};
+
     </script>
 
 </body>
